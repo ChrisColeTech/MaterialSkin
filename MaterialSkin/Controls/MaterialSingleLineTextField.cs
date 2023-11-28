@@ -164,11 +164,11 @@ namespace MaterialSkin.Controls
         {
             add
             {
-                _baseTextBox.ContextMenuChanged += value;
+                _baseTextBox.CustomContextMenuChanged += value;
             }
             remove
             {
-                _baseTextBox.ContextMenuChanged -= value;
+                _baseTextBox.CustomContextMenuChanged -= value;
             }
         }
 
@@ -1134,6 +1134,14 @@ namespace MaterialSkin.Controls
                 }
             }
 
+            public event EventHandler CustomContextMenuChanged;
+
+            private void OnCustomContextMenuChanged(EventArgs e)
+            {
+                CustomContextMenuChanged?.Invoke(this, e);
+            }
+
+
             private void ContextMenuStripOnOpening(object sender, CancelEventArgs cancelEventArgs)
             {
                 var strip = sender as TextBoxContextMenuStrip;
@@ -1146,6 +1154,9 @@ namespace MaterialSkin.Controls
                     strip.Delete.Enabled = !string.IsNullOrEmpty(SelectedText);
                     strip.SelectAll.Enabled = !string.IsNullOrEmpty(Text);
                 }
+
+                // Notify when the context menu changes
+                OnCustomContextMenuChanged(EventArgs.Empty);
             }
         }
 
